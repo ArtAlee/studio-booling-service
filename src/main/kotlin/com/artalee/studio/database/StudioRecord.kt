@@ -1,26 +1,24 @@
 package com.artalee.studio.database
 
-
-
+import jakarta.persistence.*
 import java.time.LocalDateTime
 
-import lombok.AllArgsConstructor
-import lombok.Data
-import lombok.NoArgsConstructor
-import javax.persistence.*
-
 @Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Table(name = "studio_records")
-class StudioRecord(
+@Table(name = "booking")
+data class StudioRecord(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private var id: Long? = null,
-    private var name: String,
-    private var client: String,
-    private var date: LocalDateTime,
-    private var startTime: LocalDateTime,
-    private var endTime: LocalDateTime
+    val id: Long? = null,
+
+    @Column(name = "studio_name")
+    val studioName: String,
+
+    @Column(name = "client_name")
+    val clientName: String,
+
+    @Column(name = "start_time")
+    val startTime: LocalDateTime,
+
+    @Column(name = "end_time")
+    val endTime: LocalDateTime
 )

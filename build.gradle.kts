@@ -5,7 +5,7 @@ plugins {
 	id("io.spring.dependency-management") version "1.1.4"
 	kotlin("jvm") version "1.9.23"
 	kotlin("plugin.spring") version "1.9.23"
-	id("io.freefair.lombok") version "8.6"
+	kotlin("plugin.jpa") version "1.9.23"
 }
 
 group = "com.artalee"
@@ -20,32 +20,17 @@ repositories {
 }
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter")
-	implementation("org.jetbrains.kotlin:kotlin-reflect")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
-
-	implementation ("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation ("org.postgresql:postgresql")
-
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("org.springframework.boot:spring-boot-starter-web")
-
-	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.postgresql:postgresql")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+	runtimeOnly("org.aspectj:aspectjweaver")
 
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("org.springframework.boot:spring-boot-starter-validation")
-	implementation("org.springframework.boot:spring-boot-starter-aop")
-	runtimeOnly("org.aspectj:aspectjweaver:1.9.22")
-	runtimeOnly("org.aspectj:aspectjrt:1.9.22")
-	implementation("jakarta.persistence:jakarta.persistence-api:3.0.0")
-	implementation("org.hibernate:hibernate-core:5.6.5.Final")
-	implementation("jakarta.validation:jakarta.validation-api:2.0.2")
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+	implementation ("org.springframework.kafka:spring-kafka")
+
 }
 
 tasks.withType<KotlinCompile> {
