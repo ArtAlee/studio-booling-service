@@ -1,16 +1,17 @@
-package com.artalee.studio.kafka
+package com.artalee.studio.database
 
-import com.artalee.studio.database.StudioRecord
-import org.apache.kafka.clients.consumer.ConsumerRecord
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Service
-
+import org.springframework.transaction.annotation.Transactional
 
 @Service
-class KafkaConsumerService {
+class KafkaConsumerService(@Autowired private val repository: StudioRecordRepository) {
 
     @KafkaListener(topics = ["studio_records"], groupId = "studio-group")
-    fun listen(record: ConsumerRecord<String, StudioRecord>) {
-        println("Received: ${record.value()}")
+    @Transactional
+    fun listen(record: StudioRecord) {
+        println("Received: $record")
+        repository.save(record) // Сохраняем запись в базу данных
     }
 }

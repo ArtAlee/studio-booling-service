@@ -23,9 +23,11 @@ class StudioRecordController(@Autowired private val studioRecordService: StudioR
         )
     }
 
+    // Получение всех записей из Kafka не поддерживается, так как Kafka не предназначен для таких операций
+    // Метод можно удалить или оставить нереализованным
     @GetMapping("/getAllRecords")
     fun getAllRecords(): List<StudioRecord> {
-        return studioRecordService.getAllRecords()
+        throw UnsupportedOperationException("This operation is not supported using Kafka")
     }
 
     data class RecordRequest(
