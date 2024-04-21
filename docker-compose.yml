@@ -1,0 +1,61 @@
+version: '3.8'
+services:
+  zookeeper:
+    image: zookeeper:3.6
+    platform: linux/amd64
+    ports:
+      - "2183:2181"
+    networks:
+      - app-network
+
+  kafka:
+    image: wurstmeister/kafka
+    ports:
+      - "9093:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    depends_on:
+      - zookeeper
+    networks:
+      - app-network
+
+  postgres:
+    image: postgres:13
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: studio_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  app:
+    platform: linux/amd64
+    build: .
+    ports:
+      - "8085:8082"
+    environment:
+      SPRING_KAFKA_PRODUCER_BOOTSTRAP-SERVERS: kafka:9092
+      SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS: kafka:9092
+      SPRING_KAFKA_CONSUMER_GROUP-ID: studio-group
+      SPRING_KAFKA_CONSUMER_AUTO-OFFSET-RESET: earliest
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/studio_db
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_JPA_HIBERNATE_DDL-AUTO: update
+    depends_on:
+      - kafka
+      - postgres
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres-data:

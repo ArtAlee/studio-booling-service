@@ -12,6 +12,6 @@ class KafkaConsumerService(@Autowired private val repository: StudioRecordReposi
     @Transactional
     fun listen(record: StudioRecord) {
         println("Received: $record")
-        repository.save(record) // Сохраняем запись в базу данных
+        repository.save(record)
     }
 }

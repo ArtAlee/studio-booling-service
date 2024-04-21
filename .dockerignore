@@ -1,0 +1,57 @@
+/node_modules/
+/public/build/
+/out
+/tmp
+/build/
+/.gradle/
+/.rpt2_cache/
+/.idea/
+/.git/
+/Jenkinsfile
+/Dockerfile
+/docker-compose*
+/README.*
+
+.DS_Store
+
+# Ignore version control directories
+.git/
+.svn/
+.hg/
+
+# Ignore all logs
+logs/
+*.log
+
+# Ignore node modules
+node_modules/
+
+# Ignore build outputs
+dist/
+build/
+out/
+
+# Ignore test and development specific files
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+**/tmp
+**/coverage
+**/.coverage
+**/*.tmp
+**/*.bak
+**/*.swp
+**/.cache
+**/*.md
+
+# Ignore IDE specific files and directories
+.idea/
+.vscode/
+*.sublime-workspace
+
+# Ignore Docker volumes
+volumes/
+
+# Ignore environment files
+.env

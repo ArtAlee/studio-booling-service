@@ -1,6 +1,7 @@
 package com.artalee.studio.database
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -10,24 +11,26 @@ import java.time.format.DateTimeFormatter
 class StudioRecordController(@Autowired private val studioRecordService: StudioRecordService) {
 
     @PostMapping("/createRecord")
-    fun createRecord(@RequestBody request: RecordRequest): StudioRecord {
+    fun createRecord(@RequestBody request: RecordRequest): ResponseEntity<Any> {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
         val startTime = LocalDateTime.parse(request.startTime, formatter)
         val endTime = LocalDateTime.parse(request.endTime, formatter)
-
-        return studioRecordService.createRecord(
-            studioName = request.studioName,
-            clientName = request.clientName,
-            startTime = startTime,
-            endTime = endTime
-        )
+        return try {
+            val record = studioRecordService.createRecord(
+                studioName = request.studioName,
+                clientName = request.clientName,
+                startTime = startTime,
+                endTime = endTime
+            )
+            ResponseEntity.ok(record)
+        } catch (e: IllegalStateException) {
+            ResponseEntity.badRequest().body(e.message)
+        }
     }
 
-    // Получение всех записей из Kafka не поддерживается, так как Kafka не предназначен для таких операций
-    // Метод можно удалить или оставить нереализованным
     @GetMapping("/getAllRecords")
-    fun getAllRecords(): List<StudioRecord> {
-        throw UnsupportedOperationException("This operation is not supported using Kafka")
+    fun getAllRecords(): ResponseEntity<List<StudioRecord>> {
+        return ResponseEntity.ok(studioRecordService.getAllRecords())
     }
 
     data class RecordRequest(
@@ -37,3 +40,4 @@ class StudioRecordController(@Autowired private val studioRecordService: StudioR
         val endTime: String
     )
 }
+
