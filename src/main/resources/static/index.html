@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio Records Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        form, .records-display {
+            margin-top: 20px;
+        }
+        input, button {
+            margin: 5px;
+            padding: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<h1>Studio Records Management</h1>
+<form id="createRecordForm">
+    <h2>Create Record</h2>
+    <input type="text" id="studioName" placeholder="Studio Name" required>
+    <input type="text" id="clientName" placeholder="Client Name" required>
+    <input type="text" id="startTime" placeholder="Start Time (yyyy-MM-dd HH:mm)" required>
+    <input type="text" id="endTime" placeholder="End Time (yyyy-MM-dd HH:mm)" required>
+    <button type="button" onclick="createRecord()">Submit</button>
+</form>
+
+<div class="records-display">
+    <h2>All Records</h2>
+    <button onclick="getAllRecords()">Refresh Records</button>
+    <ul id="recordsList"></ul>
+</div>
+
+<script>
+    function createRecord() {
+        const data = {
+            studioName: document.getElementById('studioName').value,
+            clientName: document.getElementById('clientName').value,
+            startTime: document.getElementById('startTime').value,
+            endTime: document.getElementById('endTime').value
+        };
+
+        fetch('/api/studio/createRecord', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert('Record created successfully!');
+                getAllRecords();
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
+    function getAllRecords() {
+        fetch('/api/studio/getAllRecords')
+            .then(response => response.json())
+            .then(records => {
+                const list = document.getElementById('recordsList');
+                list.innerHTML = '';
+                records.forEach(record => {
+                    const item = document.createElement('li');
+                    item.textContent = `Studio: ${record.studioName}, Client: ${record.clientName}, Start: ${record.startTime}, End: ${record.endTime}`;
+                    list.appendChild(item);
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+</script>
+</body>
+</html>
