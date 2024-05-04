@@ -52,12 +52,18 @@
             },
             body: JSON.stringify(data),
         })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Slot is busy');
+                }
+                return response.json();
+            })
             .then(data => {
                 alert('Record created successfully!');
                 getAllRecords();
             })
             .catch((error) => {
+                alert(error.message);
                 console.error('Error:', error);
             });
     }
@@ -76,6 +82,7 @@
             })
             .catch((error) => {
                 console.error('Error:', error);
+                alert('Failed to fetch records');
             });
     }
 </script>
