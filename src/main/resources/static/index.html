@@ -52,20 +52,27 @@
             },
             body: JSON.stringify(data),
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Slot is busy');
+        .then(response => {
+            // Check if the response is OK and the content type is JSON
+            const contentType = response.headers.get("content-type");
+            if (!response.ok) {
+                if (contentType && contentType.indexOf("application/json") !== -1) {
+                    return response.json().then(data => Promise.reject(data));
+                } else {
+                    return response.text().then(text => Promise.reject(text));
                 }
-                return response.json();
-            })
-            .then(data => {
-                alert('Record created successfully!');
-                getAllRecords();
-            })
-            .catch((error) => {
-                alert(error.message);
-                console.error('Error:', error);
-            });
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert('Record created successfully!');
+            getAllRecords();
+        })
+        .catch((error) => {
+            // Handle text or JSON error message accordingly
+            alert(typeof error === 'string' ? error : error.message);
+            console.error('Error:', error);
+        });
     }
 
     function getAllRecords() {

@@ -11,7 +11,6 @@ class KafkaConsumerService(@Autowired private val repository: StudioRecordReposi
     @KafkaListener(topics = ["studio_records"], groupId = "studio-group")
     @Transactional
     fun listen(record: StudioRecord) {
-        println("Received: $record")
         repository.save(record)
     }
 }
