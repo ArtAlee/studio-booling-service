@@ -1,6 +1,7 @@
 package com.artalee.studio.database
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
@@ -24,7 +25,7 @@ class StudioRecordController(@Autowired private val studioRecordService: StudioR
             )
             ResponseEntity.ok(record)
         } catch (e: IllegalStateException) {
-            ResponseEntity.badRequest().body(e.message)
+            ResponseEntity.status(HttpStatus.ACCEPTED).body(e.message)
         }
     }
 
