@@ -53,24 +53,21 @@
             body: JSON.stringify(data),
         })
         .then(response => {
-            // Check if the response is OK and the content type is JSON
-            const contentType = response.headers.get("content-type");
-            if (!response.ok) {
-                if (contentType && contentType.indexOf("application/json") !== -1) {
-                    return response.json().then(data => Promise.reject(data));
-                } else {
-                    return response.text().then(text => Promise.reject(text));
-                }
+            if (!response.ok && response.status !== 202) {
+                return response.text().then(text => Promise.reject(text));
             }
-            return response.json();
+            return response.status === 202 ? response.text() : response.json();
         })
         .then(data => {
-            alert('Record created successfully!');
-            getAllRecords();
+            if (typeof data === 'string') {
+                alert('Notice: ' + data); // When the server responds with a text message
+            } else {
+                alert('Record created successfully!');
+                getAllRecords();
+            }
         })
         .catch((error) => {
-            // Handle text or JSON error message accordingly
-            alert(typeof error === 'string' ? error : error.message);
+            alert('Error: ' + error);
             console.error('Error:', error);
         });
     }
