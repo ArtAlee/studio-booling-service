@@ -33,6 +33,9 @@ dependencies {
 
 	implementation ("org.springframework.kafka:spring-kafka")
 
+	implementation("net.logstash.logback:logstash-logback-encoder:6.6")
+
+
 
 }
 
