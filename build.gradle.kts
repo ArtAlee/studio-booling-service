@@ -34,7 +34,7 @@ dependencies {
 	implementation ("org.springframework.kafka:spring-kafka")
 
 	implementation("net.logstash.logback:logstash-logback-encoder:6.6")
-
+	implementation("com.github.loki4j:loki-logback-appender:1.4.1")
 
 
 }

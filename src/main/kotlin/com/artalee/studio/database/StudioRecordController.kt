@@ -1,5 +1,6 @@
 package com.artalee.studio.database
 
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -10,7 +11,7 @@ import java.time.format.DateTimeFormatter
 @RestController
 @RequestMapping("/api/studio")
 class StudioRecordController(@Autowired private val studioRecordService: StudioRecordService) {
-
+    private val log = LoggerFactory.getLogger(StudioRecordController::class.java)
     @PostMapping("/createRecord")
     fun createRecord(@RequestBody request: RecordRequest): ResponseEntity<Any> {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
@@ -23,14 +24,17 @@ class StudioRecordController(@Autowired private val studioRecordService: StudioR
                 startTime = startTime,
                 endTime = endTime
             )
+            log.info("New booking has been created $record")
             ResponseEntity.ok(record)
         } catch (e: IllegalStateException) {
+            log.warn("Unavailable slot cant be booked")
             ResponseEntity.status(HttpStatus.ACCEPTED).body(e.message)
         }
     }
 
     @GetMapping("/getAllRecords")
     fun getAllRecords(): ResponseEntity<List<StudioRecord>> {
+        log.info("Request of all bookings")
         return ResponseEntity.ok(studioRecordService.getAllRecords())
     }
 
