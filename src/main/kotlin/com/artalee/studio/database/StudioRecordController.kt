@@ -2,6 +2,7 @@ package com.artalee.studio.database
 
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -32,6 +33,7 @@ class StudioRecordController(@Autowired private val studioRecordService: StudioR
         }
     }
 
+    @Cacheable("myCache")
     @GetMapping("/getAllRecords")
     fun getAllRecords(): ResponseEntity<List<StudioRecord>> {
         log.info("Request of all bookings")

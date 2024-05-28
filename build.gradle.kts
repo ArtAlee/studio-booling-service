@@ -36,6 +36,9 @@ dependencies {
 	implementation("net.logstash.logback:logstash-logback-encoder:6.6")
 	implementation("com.github.loki4j:loki-logback-appender:1.4.1")
 
+	implementation("org.springframework.boot:spring-boot-starter-data-redis")
+	implementation("org.springframework.boot:spring-boot-starter-cache")
+
 
 }
 
